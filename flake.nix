@@ -13,14 +13,14 @@
         # cimgui is in nixpkgs under "cimgui"
         buildInputs = with pkgs; [
           zig
-          SDL2
-          cimgui
           pkg-config
+          lazygit
         ];
       in {
         devShell = pkgs.mkShell {
           inherit buildInputs;
           shellHook = ''
+            alias la="eza -lA"
             echo "Zylo shell ready."
           '';
         };
