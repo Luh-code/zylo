@@ -8,6 +8,18 @@
     .minimum_zig_version = "0.14.0",
 
     .dependencies = .{
+        .sdl2 = .{
+            .url = "https://github.com/libsdl-org/SDL/releases/download/release-2.30.5/SDL2-2.30.5.tar.gz",
+            .hash = "122040532bcef655b7afd21dbaa87b3c28f55658e532d3f6c8064de7792407ce3d46",
+        },
+        .imgui = .{
+            .url = "https://github.com/ocornut/imgui/archive/refs/tags/v1.90.9-docking.tar.gz",
+            .hash = "1220854ebf6bca15874cac634f0c9e39145cc0d13c1cf74822b6ed3073e906a4f8d5",
+        },
+        .imguizmo = .{
+            .url = "https://github.com/CedricGuillemet/ImGuizmo/archive/refs/heads/master.zip",
+            .hash = "1220e115522ddaabd1663ccb56ab627edd2e4a30b8e5da16f9f2524b1f5622efc604",
+        },
         //.cimgui = .{
         //    .url = "https://github.com/cimgui/cimgui.git",
         //    .hash = "N-V-__8AAFazMQANNEEqT1BjGV0DPelAWyMMBYpr0D_zuPt5",
