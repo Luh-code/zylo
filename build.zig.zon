@@ -2,29 +2,12 @@
     .name = .zylo,
 
     .version = "0.0.0",
-    
+
     .fingerprint = 0x6aa39459ac5134e9, // Changing this has security and trust implications.
 
     .minimum_zig_version = "0.14.0",
 
     .dependencies = .{
-        .sdl2 = .{
-            .url = "https://github.com/libsdl-org/SDL/releases/download/release-2.30.5/SDL2-2.30.5.tar.gz",
-            .hash = "122040532bcef655b7afd21dbaa87b3c28f55658e532d3f6c8064de7792407ce3d46",
-        },
-        .imgui = .{
-            .url = "https://github.com/ocornut/imgui/archive/refs/tags/v1.90.9-docking.tar.gz",
-            .hash = "1220854ebf6bca15874cac634f0c9e39145cc0d13c1cf74822b6ed3073e906a4f8d5",
-        },
-        .imguizmo = .{
-            .url = "https://github.com/CedricGuillemet/ImGuizmo/archive/refs/heads/master.zip",
-            .hash = "1220e115522ddaabd1663ccb56ab627edd2e4a30b8e5da16f9f2524b1f5622efc604",
-        },
-        //.cimgui = .{
-        //    .url = "https://github.com/cimgui/cimgui.git",
-        //    .hash = "N-V-__8AAFazMQANNEEqT1BjGV0DPelAWyMMBYpr0D_zuPt5",
-        //    .lazy = false,
-        //},
         // See `zig fetch --save <url>` for a command-line interface for adding dependencies.
         //.example = .{
         //    // When updating this field to a new URL, be sure to delete the corresponding
@@ -54,6 +37,14 @@
         //    // actually used.
         //    .lazy = false,
         //},
+        .cimgui_zig = .{
+            .url = "git+https://github.com/tiawl/cimgui.zig#6e1d7e028490be721d57556ae14a41969eed3d26",
+            .hash = "cimgui_zig-1.0.0-2XubkhxkUAB2RHmbi_9lAomuyU-U2mTelzDisP0cyU9e",
+        },
+        .sdl = .{
+            .url = "git+https://github.com/castholm/SDL.git#0ab7c9830bf17c1a2404461a88c0fdedf95309a4",
+            .hash = "sdl-0.2.3+3.2.14-7uIn9Gh6fgEdV7R2A723rZxtbgkVd0PHIs2rvshLBqgV",
+        },
     },
 
     // Specifies the set of files and directories that are included in this package.
