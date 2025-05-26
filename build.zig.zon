@@ -37,14 +37,14 @@
         //    // actually used.
         //    .lazy = false,
         //},
-        .cimgui_zig = .{
-            .url = "git+https://github.com/tiawl/cimgui.zig#6e1d7e028490be721d57556ae14a41969eed3d26",
-            .hash = "cimgui_zig-1.0.0-2XubkhxkUAB2RHmbi_9lAomuyU-U2mTelzDisP0cyU9e",
-        },
-        .sdl = .{
-            .url = "git+https://github.com/castholm/SDL.git#0ab7c9830bf17c1a2404461a88c0fdedf95309a4",
-            .hash = "sdl-0.2.3+3.2.14-7uIn9Gh6fgEdV7R2A723rZxtbgkVd0PHIs2rvshLBqgV",
-        },
+        //.cimgui_zig = .{
+        //    .url = "git+https://github.com/tiawl/cimgui.zig#6e1d7e028490be721d57556ae14a41969eed3d26",
+        //    .hash = "cimgui_zig-1.0.0-2XubkhxkUAB2RHmbi_9lAomuyU-U2mTelzDisP0cyU9e",
+        //},
+        //.sdl = .{
+        //    .url = "git+https://github.com/castholm/SDL.git#0ab7c9830bf17c1a2404461a88c0fdedf95309a4",
+        //    .hash = "sdl-0.2.3+3.2.14-7uIn9Gh6fgEdV7R2A723rZxtbgkVd0PHIs2rvshLBqgV",
+        //},
     },
 
     // Specifies the set of files and directories that are included in this package.

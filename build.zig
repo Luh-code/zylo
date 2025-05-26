@@ -1,32 +1,53 @@
 const std = @import("std");
-const cimgui = @import("cimgui_zig");
-const sdl = @import("sdl");
+
+const sdl_source_dir = "deps/sdl";
+const sdl_build_dir = sdl_source_dir ++ "/build";
+const sdl_install_dir = sdl_source_dir ++ "/bin";
+fn buildSDL(b: *std.Build) *std.Build.Step {
+    const sdl_cmake_configure = b.addSystemCommand(&[_][]const u8{
+        "cmake",
+        "-S", sdl_source_dir,
+        "-B", sdl_build_dir,
+        "-DSDL_VIDEO=ON",
+        "-DSDL_WAYLAND=ON",
+        "-DSDL_STATIC=ON",
+        "-DSDL_TEST=OFF",
+        "-DSDL_SHARED=OFF",
+        "-DSDL_X11=ON",
+        "-DSDL_VIDEO_VULKAN=ON",
+        "-DSDL_VIDEO_OPENGL=ON",
+        "-DCMAKE_INSTALL_PREFIX=" ++ sdl_install_dir,
+    });
+
+    const sdl_cmake_build = b.addSystemCommand(&[_][]const u8{
+        "cmake",
+        "--build", sdl_build_dir,
+        "--config", "Release"
+    }); 
+    sdl_cmake_build.step.dependOn(&sdl_cmake_configure.step);
+
+    const sdl_cmake_install = b.addSystemCommand(&[_][]const u8{
+        "cmake",
+        "--install", sdl_build_dir,
+        "--config", "Release",
+    });
+    sdl_cmake_install.step.dependOn(&sdl_cmake_build.step);
+    
+    return &sdl_cmake_install.step;
+}
+
+fn dependSDL(b: *std.Build, target: *std.Build.Step.Compile) void {
+    const sdl_install_step = buildSDL(b);
+    target.step.dependOn(sdl_install_step);
+    target.addLibraryPath(b.path(sdl_install_dir ++ "/lib64/libSDL3.a"));
+    target.addIncludePath(b.path(sdl_install_dir ++ "/include"));
+}
 
 pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
     // Create SDL3 dependency
-    const sdl_dep = b.dependency("sdl", .{
-        .target = target,
-        .optimize = optimize,
-        //.preferred_linkage = .static,
-        //.strip = null,
-        //.pic = null,
-        //.lto = null,
-        //.emscripten_pthreads = false,
-        //.install_build_config_h = false,
-    });
-    const sdl_lib = sdl_dep.artifact("SDL3");
-    //const sdl_test_lib = sdl_dep.artifact("SDL3_test");
-
-    // Create cimgui dependency
-    const cimgui_dep = b.dependency("cimgui_zig", .{
-        .target = target,
-        .optimize = optimize,
-        .platform = cimgui.Platform.SDL3,
-        .renderer = cimgui.Renderer.Vulkan,
-    });
 
     // Create Executable module
     const exe_mod = b.createModule(.{
@@ -40,11 +61,9 @@ pub fn build(b: *std.Build) !void {
         .name = "zylo",
         .root_module = exe_mod,
     });
+    dependSDL(b, exe);
 
-    // Link SDL3
-    exe.linkLibrary(sdl_lib);
     // Link cimgui
-    exe.linkLibrary(cimgui_dep.artifact("cimgui"));
 
     // Install exe artifact
     b.installArtifact(exe);

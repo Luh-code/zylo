@@ -15,6 +15,28 @@
           zig
           pkg-config
           lazygit
+          cmake
+          wayland.dev
+          wayland-protocols
+          libxkbcommon
+          libdrm
+          mesa
+          pkg-config
+          pipewire
+          xorg.libX11
+          xorg.libXext
+          xorg.libXrandr
+          xorg.libXcursor
+          dbus
+          alsa-lib
+          pulseaudio
+          wlroots_0_18
+          libglvnd
+          xorg.libXi
+          xorg.libXinerama
+          xorg.libXScrnSaver
+          xorg.libXxf86vm
+          wayland-scanner
         ];
       in {
         devShell = pkgs.mkShell {
