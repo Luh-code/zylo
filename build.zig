@@ -8,27 +8,6 @@ fn buildSDL(b: *std.Build) *std.Build.Step {
         "cmake",
         "-S", sdl_source_dir,
         "-B", sdl_build_dir,
-        "-DSDL_VIDEO=ON",
-        "-DSDL_WAYLAND=ON",
-        "-DSDL_STATIC=OFF",
-        "-DSDL_SHARED=ON",
-        "-DSDL_X11=ON",
-        "-DSDL_VIDEO_VULKAN=ON",
-        "-DSDL_VIDEO_OPENGL=ON",
-        "-DSDL_VIDEO_DRIVER_WAYLAND=ON",
-        "-DSDL_VIDEO_DRIVER_X11=ON",
-        "-DSDL_HIDAPI=ON",
-        "-DSDL_HIDAPI_JOYSTICK=ON",
-        "-DSDL_INSTALL=ON",
-        "-DSDL_JACK=OFF",
-        "-DSDL_JACK_SHARED=ON",
-        "-DSDL_SNDIO=OFF",
-        "-DSDL_SNDIO_SHARED=OFF",
-        "-DSDL_DEPS_SHARED=ON",
-        "-DSDL_HIDAPI_LIBUSB=OFF",
-        "-DSDL_TESTS=OFF",
-        "-DSDL_INSTALL_TESTS=OFF",
-        "-DSDL_TEST_LIBRARY=OFF",
         "-DCMAKE_INSTALL_PREFIX=" ++ sdl_install_dir,
         "-DCMAKE_BUILD_TYPE=Debug",
     });
@@ -58,15 +37,10 @@ fn dependSDL(b: *std.Build, target: *std.Build.Step.Compile) void {
 
     target.addLibraryPath(b.path(sdl_install_dir ++ "/lib64"));
     target.linkSystemLibrary("SDL3");
-    target.linkSystemLibrary("x11");
     target.linkSystemLibrary("wayland-client");
     target.linkSystemLibrary("wayland-cursor");
     target.linkSystemLibrary("wayland-egl");
     target.linkSystemLibrary("wayland-protocols");
-    target.linkSystemLibrary("Xext");
-    target.linkSystemLibrary("xcb");
-    target.linkSystemLibrary("Xau");
-    //target.linkSystemLibrary("Xdmcp");
     target.linkSystemLibrary("gbm");
     target.linkSystemLibrary("drm");
     target.linkSystemLibrary("glvnd");
@@ -93,7 +67,7 @@ pub fn build(b: *std.Build) !void {
     });
     exe.linkLibC();
     exe.linkLibCpp();
-    dependSDL(b, exe);
+    //dependSDL(b, exe);
 
     // Install exe artifact
     b.installArtifact(exe);
