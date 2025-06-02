@@ -49,6 +49,34 @@ fn dependSDL(b: *std.Build, target: *std.Build.Step.Compile) void {
     target.addIncludePath(b.path(sdl_install_dir ++ "/include"));
 }
 
+fn linkWayland(target: *std.Build.Step.Compile) void {
+    target.linkSystemLibrary("wayland-client");
+    target.linkSystemLibrary("wayland-cursor");
+    target.linkSystemLibrary("wayland-egl");
+    target.linkSystemLibrary("wayland-protocols");
+    target.linkSystemLibrary("gbm");
+    target.linkSystemLibrary("drm");
+    target.linkSystemLibrary("glvnd");
+    target.linkSystemLibrary("xdg-desktop-portal");
+}
+
+fn generateWlrLayerShellClientProtocol(b: *std.Build, target: *std.Build.Step.Compile) void {
+    const generate_header = b.addSystemCommand(&[_][]const u8{
+        "wayland-scanner",
+        "client-header",
+        "protocol/wlr-layer-shell-unstable-v1.xml",
+        "protocol/wlr-layer-shell/wlr-layer-shell-client-protocol.h"
+    });
+    const generate_source = b.addSystemCommand(&[_][]const u8{
+        "wayland-scanner",
+        "private-code",
+        "protocol/wlr-layer-shell-unstable-v1.xml",
+        "protocol/wlr-layer-shell/wlr-layer-shell-protocol.c"
+    });
+    generate_source.step.dependOn(&generate_header.step);
+    target.step.dependOn(&generate_source.step);
+}
+
 pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
@@ -68,6 +96,8 @@ pub fn build(b: *std.Build) !void {
     exe.linkLibC();
     exe.linkLibCpp();
     //dependSDL(b, exe);
+    linkWayland(exe);
+    generateWlrLayerShellClientProtocol(b, exe);
 
     // Install exe artifact
     b.installArtifact(exe);
