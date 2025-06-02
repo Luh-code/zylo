@@ -22,21 +22,12 @@
           libdrm
           mesa
           pipewire
-          xorg.libX11
-          xorg.libXext
-          xorg.libXrandr
-          xorg.libXcursor
           libdecor
           dbus
           alsa-lib
           pulseaudio
           wlroots_0_18
           libglvnd
-          xorg.libXi
-          xorg.libXinerama
-          xorg.libXScrnSaver
-          xorg.libXxf86vm
-          xorg.libXtst
           wayland-scanner
           libusb1
           ibus
