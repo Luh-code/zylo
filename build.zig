@@ -75,6 +75,9 @@ fn generateWlrLayerShellClientProtocol(b: *std.Build, target: *std.Build.Step.Co
     });
     generate_source.step.dependOn(&generate_header.step);
     target.step.dependOn(&generate_source.step);
+
+    target.addIncludePath(b.path("protocol/wlr-layer-shell"));
+    //target.addCSourceFile(b.path("protocol/wlr-layer-shell/wlr-layer-shell-protocol.c"));
 }
 
 pub fn build(b: *std.Build) !void {
