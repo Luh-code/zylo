@@ -1,5 +1,5 @@
 const std = @import("std");
-const c_include = @import("c_inclde.zig");
+const c_include = @import("c_include.zig");
 const c = c_include.c;
 const wayland_setup = @import("wayland/setup.zig");
 

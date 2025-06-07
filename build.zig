@@ -61,23 +61,63 @@ fn linkWayland(target: *std.Build.Step.Compile) void {
 }
 
 fn generateWlrLayerShellClientProtocol(b: *std.Build, target: *std.Build.Step.Compile) void {
-    const generate_header = b.addSystemCommand(&[_][]const u8{
-        "wayland-scanner",
-        "client-header",
-        "protocol/wlr-layer-shell-unstable-v1.xml",
-        "protocol/wlr-layer-shell/wlr-layer-shell-client-protocol.h"
-    });
-    const generate_source = b.addSystemCommand(&[_][]const u8{
-        "wayland-scanner",
-        "private-code",
-        "protocol/wlr-layer-shell-unstable-v1.xml",
-        "protocol/wlr-layer-shell/wlr-layer-shell-protocol.c"
-    });
-    generate_source.step.dependOn(&generate_header.step);
-    target.step.dependOn(&generate_source.step);
+    const xmls = comptime [_][2][:0]const u8{
+        .{ "xdg-shell", "protocol/xdg-shell.xml" },
+        .{ "wlr-layer-shell", "protocol/wlr-layer-shell-unstable-v1.xml" },
+    };
 
-    target.addIncludePath(b.path("protocol/wlr-layer-shell"));
-    //target.addCSourceFile(b.path("protocol/wlr-layer-shell/wlr-layer-shell-protocol.c"));
+    inline for (xmls) |proto| {
+        const name = proto[0];
+        const path = proto[1];
+
+        const header_out = b.pathJoin(&.{ "protocol/generated", name ++ "-client-protocol.h" });
+        const code_out = b.pathJoin(&.{ "protocol/generated", name ++ "-protocol.c" });
+
+        const header_cmd = b.addSystemCommand(&.{
+            "wayland-scanner", "client-header", path, header_out
+        });
+        const code_cmd = b.addSystemCommand(&.{
+            "wayland-scanner", "private-code", path, code_out
+        });
+
+        code_cmd.step.dependOn(&header_cmd.step);
+
+        target.addIncludePath(b.path("protocol/generated/"));
+        target.addCSourceFile(.{
+            .file = b.path(code_out),
+            .flags = &.{"-std=c99"},
+        });
+
+        target.step.dependOn(&header_cmd.step);
+        target.step.dependOn(&code_cmd.step);
+    }
+
+    //const generate_header = b.addSystemCommand(&[_][]const u8{
+    //    "wayland-scanner",
+    //    "client-header",
+    //    "protocol/wlr-layer-shell-unstable-v1.xml",
+    //    "protocol/wlr-layer-shell/wlr-layer-shell-client-protocol.h"
+    //});
+    //const generate_source = b.addSystemCommand(&[_][]const u8{
+    //    "wayland-scanner",
+    //    "private-code",
+    //    "protocol/wlr-layer-shell-unstable-v1.xml",
+    //    "protocol/wlr-layer-shell/wlr-layer-shell-protocol.c"
+    //});
+    //generate_source.step.dependOn(&generate_header.step);
+    //target.step.dependOn(&generate_source.step);
+
+    //target.addIncludePath(b.path("protocol/wlr-layer-shell"));
+    ////target.addCSourceFile(b.path("protocol/wlr-layer-shell/wlr-layer-shell-protocol.c"));
+    //target.addCSourceFile(.{
+    //    .file = b.path("protocol/wlr-layer-shell/wlr-layer-shell-protocol.c"),
+    //    .flags = &.{
+    //        "-std=c99",
+    //        "-fPIC",
+    //    },
+    //});
+
+    //target.installHeadersDirectory(b.path("protocol/wlr-layer-shell/"), "", .{});
 }
 
 pub fn build(b: *std.Build) !void {

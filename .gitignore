@@ -3,3 +3,4 @@
 zig-out/bin
 protocol/wlr-layer-shell/wlr-layer-shell-client-protocol.h
 protocol/wlr-layer-shell/wlr-layer-shell-protocol.c
+protocol/generated
